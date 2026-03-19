@@ -1,4 +1,5 @@
-//componets/login-form.tsx
+//components/login-form2.tsx
+//for registeration
 "use client";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -19,60 +20,49 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
-export function LoginForm({
+export function LoginForm2({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [email, setEmail] = useState("");
+  const router = useRouter()
   const [password, setPassword] = useState("");
   const handleGoogleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:3000/callback",
+        redirectTo: "http://localhost:3000/dashboard",
       },
     });
-
-    console.log("DATA:", data);
-    console.log("ERROR:", error);
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+      
+      if (data.user) {
+        await supabase.from("profiles").insert({
+          id: data.user.id,
+          email: data.user.email,
+          role: "staff" // default
+        })
+      }
+      alert("Register success");
 
+      
+      router.push("/login");
     if (error) {
       alert(error.message);
-      return;
-    }
-
-    // 🔥 เอา token
-    const session = data.session;
-    const token = session?.access_token;
-
-    // 🔥 ยิง backend
-    const res = await fetch("http://localhost:3001/api/auth/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const result = await res.json();
-    const role = result.user.role;
-    document.cookie = `role=${role}; path=/`;
-    if (role === "admin") {
-      window.location.href = "/dashboard";
-    } else if (role === "brand") {
-      window.location.href = "/brand";
     } else {
-      window.location.href = "/pos";
+      alert("Register success");
     }
   };
-
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -81,7 +71,7 @@ export function LoginForm({
           <CardDescription>Login with Google account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleRegister}>
             <FieldGroup>
               <Field>
                 <Button
@@ -106,9 +96,9 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
+                  placeholder="m@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="m@example.com"
                   required
                 />
               </Field>
@@ -131,9 +121,9 @@ export function LoginForm({
                 />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit">Register</Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="/register">Sign up</a>
+                  Already have an account? <a href="/login">Login</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>
