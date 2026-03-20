@@ -106,6 +106,7 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
+                  data-cy="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="m@example.com"
@@ -126,12 +127,13 @@ export function LoginForm({
                   id="password"
                   type="password"
                   value={password}
+                  data-cy="password"
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" data-cy="login-btn">Login</Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account? <a href="/register">Sign up</a>
                 </FieldDescription>
