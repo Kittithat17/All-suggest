@@ -86,56 +86,33 @@ export default function DashboardPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Recent Transactions</CardTitle>
+          <CardTitle>Top Products</CardTitle>
+          <CardDescription>Best performing products this week</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Brand</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
-              </TableRow>
-            </TableHeader>
 
-            <TableBody>
-              {data.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.name}</TableCell>
+        <CardContent className="space-y-4">
+          {[
+            { name: "Coke 325ml", sales: 120, growth: "+12%" },
+            { name: "Oishi Green Tea", sales: 98, growth: "+8%" },
+            { name: "Soy Sauce 500ml", sales: 76, growth: "+5%" },
+            { name: "Snickers Bar", sales: 65, growth: "+3%" },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition"
+            >
+              <div>
+                <p className="font-medium">{item.name}</p>
+                <p className="text-sm text-muted-foreground">
+                  {item.sales} sales
+                </p>
+              </div>
 
-                  <TableCell>${item.amount.toLocaleString()}</TableCell>
-
-                  <TableCell>
-                    {item.status === "Paid" && (
-                      <Badge className="flex items-center gap-1 bg-green-100 text-green-700 border border-green-200">
-                        <CheckCircle2 className="w-3 h-3" />
-                        Paid
-                      </Badge>
-                    )}
-
-                    {item.status === "Pending" && (
-                      <Badge className="flex items-center gap-1 bg-yellow-100 text-yellow-700 border border-yellow-200">
-                        <Clock className="w-3 h-3" />
-                        Pending
-                      </Badge>
-                    )}
-
-                    {item.status === "Failed" && (
-                      <Badge className="flex items-center gap-1 bg-red-100 text-red-700 border border-red-200">
-                        <XCircle className="w-3 h-3" />
-                        Failed
-                      </Badge>
-                    )}
-                  </TableCell>
-
-                  <TableCell className="text-muted-foreground">
-                    {new Date().toLocaleDateString()}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              <Badge className="bg-green-100 text-green-700 border border-green-200">
+                {item.growth}
+              </Badge>
+            </div>
+          ))}
         </CardContent>
       </Card>
     </div>
