@@ -48,9 +48,9 @@ export function Sidebar() {
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/dashboard/finance">
+                  <Link href="/dashboard/ai">
                     <DollarSign />
-                    Finance
+                    Ai
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

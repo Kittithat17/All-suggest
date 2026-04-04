@@ -64,7 +64,6 @@ describe("Security Tests", () => {
   
       cy.visit("/dashboard")
   
-      // ❗ ถ้าระบบคุณ secure → ต้องไม่เข้าได้
       cy.url().should("include", "/login")
     })
   
